@@ -1,0 +1,86 @@
+{
+  "name": "car-parking-system-api",
+  "version": "1.0.0",
+  "description": "DATN",
+  "author": "admin",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "typeorm": "ts-node ./node_modules/typeorm/cli",
+    "typeorm:run-migration": "npm run typeorm migration:run -- -d src/database/configs/typeorm-migration.config.ts",
+    "typeorm:generate-migration": "npm run typeorm -- -d src/database/configs/typeorm-migration.config.ts migration:generate src/database/migrations/migration",
+    "typeorm:create-migration": "npm run typeorm -- migration:create src/database/migrations/migration",
+    "typeorm:revert-migration": "npm run typeorm migration:revert -- -d src/database/configs/typeorm-migration.config.ts",
+    "typeorm:create-seed": "npm run typeorm -- migration:create src/database/seeds/seed",
+    "typeorm:run-seed": "npm run typeorm migration:run -- -d src/database/configs/typeorm-seed.config.ts",
+    "typeorm:revert-seed": "npm run typeorm migration:revert -- -d src/database/configs/typeorm-seed.config.ts"
+  },
+  "dependencies": {
+    "@jridgewell/sourcemap-codec": "^1.4.14",
+    "@nestjs/cli": "^9.2.0",
+    "@nestjs/common": "^9.2.1",
+    "@nestjs/config": "^2.2.0",
+    "@nestjs/core": "^9.0.0",
+    "@nestjs/jwt": "^10.0.1",
+    "@nestjs/mapped-types": "*",
+    "@nestjs/passport": "^9.0.0",
+    "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/swagger": "^6.1.4",
+    "@nestjs/typeorm": "^9.0.1",
+    "bcrypt": "^5.1.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
+    "cloudinary": "^1.33.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "g": "^2.0.1",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.11.3",
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
+    "rxjs": "^7.8.0",
+    "typeorm": "^0.3.20",
+    "webpack": "^5.75.0",
+    "winston": "^3.8.2",
+    "winston-daily-rotate-file": "^4.7.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/express": "^4.17.13",
+    "@types/multer": "^1.4.7",
+    "@types/node": "^16.0.0",
+    "@types/passport-jwt": "^3.0.8",
+    "@types/passport-local": "^1.0.34",
+    "prettier": "^2.3.2",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "4.1.0",
+    "typescript": "^4.7.4"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
+}

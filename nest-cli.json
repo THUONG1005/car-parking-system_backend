@@ -1,0 +1,12 @@
+{
+  "appName": "car-parking-system",
+  "description": "Car Parking System Api",
+  "author": "admin",
+  "language": "ts",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "typescript": true,
+    "watchAssets": true
+  }
+}

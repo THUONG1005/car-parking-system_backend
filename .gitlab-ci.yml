@@ -1,0 +1,49 @@
+stages:
+  - publish
+  - deploy
+
+variables:
+  TAG_LATEST: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME:latest
+  TAG_COMMIT: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_NAME
+
+publish:
+  image: docker:20.10.3
+  stage: publish
+  services:
+    - docker:18.09.7-dind
+  script:
+    - docker build -t $TAG_COMMIT -t $TAG_LATEST .
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - docker push $TAG_COMMIT
+    - docker push $TAG_LATEST
+
+  interruptible: true
+  only:
+    - main
+
+deploy:
+  image: docker:20.10.3
+  stage: deploy
+  services:
+    - docker:18.09.7-dind
+  tags:
+    - deployment
+
+  before_script:
+    - apk update && apk add openssh-client bash
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+
+  script:
+    - ssh -o StrictHostKeyChecking=no -l root -p 22 139.59.103.50 "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+    - ssh -o StrictHostKeyChecking=no -l root -p 22 139.59.103.50 "docker pull $TAG_COMMIT"
+    - ssh -o StrictHostKeyChecking=no -l root -p 22 139.59.103.50 "docker stop car-parking-system || true"
+    - ssh -o StrictHostKeyChecking=no -l root -p 22 139.59.103.50 "docker rm car-parking-system || true"
+    - ssh -o StrictHostKeyChecking=no -l root -p 22 139.59.103.50 "docker run -dit --restart=always -p 9292:3000 --name car-parking-system $TAG_COMMIT"
+    - ssh -o StrictHostKeyChecking=no -l root -p 22 139.59.103.50 "docker image prune -af"
+
+  only:
+    - main
+
